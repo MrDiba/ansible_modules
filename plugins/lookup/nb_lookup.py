@@ -259,6 +259,17 @@ def get_endpoint(netbox, term):
     major, minor, patch = tuple(map(int, pynetbox.__version__.split(".")))
     netbox_versiontuple = tuple(map(int, netbox.version.split(".")))
 
+    if (major, minor, patch) >=(6, 0):
+        netbox_endpoint_map["custom-field-choice-sets"] = {
+            "endpoint": netbox.extras.custom_field_choice_sets
+        }
+    else:
+        if "custom-field-choice-sets" in term:
+            Display().v(
+                "pynetbox version %d.%d.%d does not support custom-field-choice-sets; please update to v6.0.0 or newer."
+                % (major, minor, patch)
+            )
+
     if (major, minor, patch) >= (6, 4):
         netbox_endpoint_map["wireless-lan-groups"] = {
             "endpoint": netbox.wireless.wireless_lan_groups
